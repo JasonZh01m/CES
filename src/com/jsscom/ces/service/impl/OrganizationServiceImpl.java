@@ -63,8 +63,11 @@ public class OrganizationServiceImpl extends ServiceImpl<Organization>
 	}
 
 	private String getDelIds(int organizationId) {
+		// Modified By JasonZh
+		// List<Organization> childorganization = this.organizationDao
+		// .findAllOrganizationByPid(organizationId);
 		List<Organization> childorganization = this.organizationDao
-				.findAllOrganizationByPid(organizationId);
+				.findAllOrganizationByPid(organizationId + "");
 		for (Organization organization : childorganization) {
 			deleteOrganizationByPid(organization.getId());
 		}
@@ -124,8 +127,8 @@ public class OrganizationServiceImpl extends ServiceImpl<Organization>
 			else {
 				zb.setChecked("false");
 			}
-			zb.setId(org.getId());
-			zb.setPId(org.getParentId());
+			zb.setId(org.getId() + "");
+			zb.setPId(org.getParentId() + "");
 			zb.setName(org.getName());
 			zb.setCode(org.getCode());
 			if (hasChilders(org))

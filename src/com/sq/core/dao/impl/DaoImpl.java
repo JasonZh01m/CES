@@ -94,18 +94,14 @@ public abstract class DaoImpl<T> implements Dao<T> {
 		return list;
 	}
 
-	@Override
-	public T queryById(String sqlId, int id) {
-		Object obj = getSqlSession().selectOne(this.ClassName + sqlId,
-				Integer.valueOf(id));
-		return obj;
-	}
-
-	@Override
-	public T queryByCode(String sqlId, String code) {
-		Object obj = getSqlSession().selectOne(this.ClassName + sqlId, code);
-		return obj;
-	}
+	/*
+	 * @Override public T queryById(String sqlId, int id) { Object obj =
+	 * getSqlSession().selectOne(this.ClassName + sqlId, Integer.valueOf(id));
+	 * return obj; }
+	 * 
+	 * @Override public T queryByCode(String sqlId, String code) { Object obj =
+	 * getSqlSession().selectOne(this.ClassName + sqlId, code); return obj; }
+	 */
 
 	@Override
 	public int insert(String sqlId, T entity) {
@@ -181,7 +177,7 @@ public abstract class DaoImpl<T> implements Dao<T> {
 			int size = entityList.size();
 			for (int i = 0; i < size; i++) {
 				Object entity = entityList.get(i);
-				update(sqlId, entity);
+				// update(sqlId, entity);
 				rs++;
 			}
 			session.commit();
@@ -270,7 +266,7 @@ public abstract class DaoImpl<T> implements Dao<T> {
 				}
 			}
 			if (obj != null) {
-				list.add(obj);
+				// list.add(obj);
 			}
 		}
 		return list;

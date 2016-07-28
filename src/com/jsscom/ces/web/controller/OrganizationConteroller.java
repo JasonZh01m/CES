@@ -83,8 +83,11 @@ public class OrganizationConteroller extends Action<Organization> {
 		List results = new ArrayList();
 		for (Organization org : listOrganizations) {
 			ZtreeBean zb = new ZtreeBean();
-			zb.setId(org.getId());
-			zb.setPId(org.getParentId());
+			// Modified By JasonZh 0728
+			// zb.setId(org.getId());
+			// zb.setPId(org.getParentId());
+			zb.setId(org.getId() + "");
+			zb.setPId(org.getParentId() + "");
 			zb.setName(org.getName());
 			zb.setCode(org.getCode());
 			org.setOrgId(orgId);
@@ -243,13 +246,14 @@ public class OrganizationConteroller extends Action<Organization> {
 		for (int i = 0; i < equalList.size(); i++) {
 			map.remove(equalList.get(i));
 
-			for (int j = 0; j < uorList.size(); j++) {
-				if (((Integer) equalList.get(i)).equals(Integer
-						.valueOf(((UserOrganizationRelation) uorList.get(j))
-								.getUserId()))) {
-					uorList.remove(j);
-				}
-			}
+			// Modified By JasonZh 0728
+			// for (int k = 0; k < uorList.size(); k++) {
+			// // if (((Integer) equalList.get(i)).equals(Integer
+			// // .valueOf(((UserOrganizationRelation) uorList.get(k))
+			// // .getUserId()))) {
+			// // uorList.remove(k);
+			// // }
+			// }
 		}
 
 		this.log.info("equalList:" + equalList);
@@ -262,11 +266,12 @@ public class OrganizationConteroller extends Action<Organization> {
 			this.userOrganizationRelationService.deleteByUserOrganization(uor);
 		}
 
-		for (int j = map.keySet().iterator(); j.hasNext();) {
-			int key = ((Integer) j.next()).intValue();
-			uor.setUserId(key);
-			this.userOrganizationRelationService.create(uor);
-		}
+		// Modified By JasonZh 0728
+		/*
+		 * for (int j = map.keySet().iterator(); j.hasNext();) { int key =
+		 * ((Integer) j.next()).intValue(); uor.setUserId(key);
+		 * this.userOrganizationRelationService.create(uor); }
+		 */
 		rm.setSuccess(0);
 		return rm;
 	}

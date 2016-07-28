@@ -155,10 +155,14 @@ public class PermissionServiceImpl extends ServiceImpl<Permission> implements
 				Permission p = (Permission) allPermission.get(i);
 				ZtreeBean zb = new ZtreeBean();
 				zb.setChecked("false");
-				zb.setId(p.getId());
-				zb.setPId(p.getParentId());
+				// Modified By JasonZh 0728
+				// zb.setId(p.getId());
+				zb.setId(p.getId() + "");
+				// zb.setPId(p.getParentId());
+				zb.setPId(p.getParentId() + "");
 				zb.setName(p.getName());
-				zb.setSid(p.getSysId());
+				// zb.setSid(p.getSysId());
+				zb.setSid(p.getSysId() + "");
 				if (p.getParentId() == 0) {
 					zb.setOpen("true");
 					zb.setIsParent("true");
@@ -196,10 +200,15 @@ public class PermissionServiceImpl extends ServiceImpl<Permission> implements
 				else {
 					zb.setChecked("false");
 				}
-				zb.setId(p.getId());
-				zb.setPId(p.getParentId());
+
+				// Modified By JasonZh 0728
+				// zb.setId(p.getId());
+				zb.setId(p.getId() + "");
+				// zb.setPId(p.getParentId());
+				zb.setPId(p.getParentId() + "");
 				zb.setName(p.getName());
-				zb.setSid(p.getSysId());
+				// zb.setSid(p.getSysId());
+				zb.setSid(p.getSysId() + "");
 				if (p.getParentId() == 0) {
 					zb.setOpen("true");
 					zb.setIsParent("true");
@@ -273,7 +282,9 @@ public class PermissionServiceImpl extends ServiceImpl<Permission> implements
 		int rs = update(permission);
 		if (rs > 0) {
 			UriInfo uriInfo = new UriInfo();
-			uriInfo.setPid(permission.getId());
+			// Modified By JasonZh 0728
+			// uriInfo.setPid(permission.getId());
+			uriInfo.setPid(permission.getId() + "");
 			uriInfo.setType(permission.getType());
 			UriCache.put(permission.getResourceString(), uriInfo);
 		}
@@ -285,7 +296,9 @@ public class PermissionServiceImpl extends ServiceImpl<Permission> implements
 		int rs = create(permission);
 		if (rs > 0) {
 			UriInfo uriInfo = new UriInfo();
-			uriInfo.setPid(permission.getId());
+			// Modified By JasonZh 0728
+			// uriInfo.setPid(permission.getId());
+			uriInfo.setPid(permission.getId() + "");
 			uriInfo.setType(permission.getType());
 			UriCache.put(permission.getResourceString(), uriInfo);
 		}

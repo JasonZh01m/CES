@@ -111,8 +111,11 @@ public class DataUploadController extends Action<DevInfo> {
 		}
 		this.log.debug("ResponseModel:" + rm);
 		try {
-			response.setHeader("Content-Length".intern(), rm.toString()
-					.getBytes("UTF-8".intern()).length);
+			// Modified By JasonZh
+			// response.setHeader("Content-Length".intern(), rm.toString()
+			// .getBytes("UTF-8".intern()).length);
+			response.setHeader("Content-Length", rm.toString()
+					.getBytes("UTF-8") + "");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -232,7 +235,9 @@ public class DataUploadController extends Action<DevInfo> {
 					devInfoClient.setOrgcode(info.getOrgCode());
 					devInfoClient.setOrgname(info.getOrgName());
 					devInfoClient.setWindowname(info.getWindowName());
-					devInfoClient.setDevstatus(info.getAuditStatus());
+					// Modified By JasonZh 0728
+					// devInfoClient.setDevstatus(info.getAuditStatus());
+					devInfoClient.setDevstatus(info.getAuditStatus() + "");
 					listClient.add(devInfoClient);
 				}
 				if ((listClient != null) && (listClient.size() > 0)) {
