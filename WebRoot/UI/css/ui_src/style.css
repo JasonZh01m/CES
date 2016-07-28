@@ -1,0 +1,83 @@
+* {
+	font-size: 12px;
+	font-family: Arial, Tahoma, Verdana, "微软雅黑";
+	margin: 0 auto;
+	padding: 0;
+}
+
+.mainBody {
+	background-color: #5C5E5D;
+	height: 450px;
+	width: 1000px;
+	margin: 100px 0 0 100px;
+	overflow: hidden;
+}
+
+.railline {
+	border-top: 2px solid #AAAEAF;
+	border-bottom: 2px solid #AAAEAF;
+	height: 30px;
+	width: 100%;
+	margin: 150px 0;
+}
+
+.stations {
+	border: 2px solid #7D7C7B;
+	float: left;
+	height: 30px;
+	line-height: 30px;
+	padding: 10px 10px 10px 55px;
+	margin: -12px 10px 0 0;
+	color: white;
+	font-size: 18px;
+	background: url("../images/Station_Red.png") no-repeat #6f7070;
+}
+
+.stations span {
+	color: #A5D695;
+	padding: 0 0 0 10px;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.noti {
+	position: relative;
+}
+
+.noti_up {
+	top: -230px;
+}
+
+.noti_down {
+	top: -205px;
+}
+
+.noti ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.noti ul li {
+	height: 40px;
+	padding: 5px;
+	margin: 0px;
+	width: 60px;
+	overflow: hidden;
+	color: #8BE786;
+	position: absolute;
+}
+
+.noti_up ul li {
+	text-align: right;
+	line-height: 20px;
+	background: url("../images/Notition_Green.png") no-repeat bottom left;
+	top: 0px;
+}
+
+.noti_down ul li {
+	text-align: left;
+	line-height: 60px;
+	background: url("../images/Notition_Green_Down.png") no-repeat top right;
+	top: 50px;
+}

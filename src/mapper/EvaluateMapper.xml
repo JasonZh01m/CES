@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Evaluate">
+
+	<resultMap type="com.jsscom.ces.model.Evaluate" id="evaluateoMap">	
+	 <result property="reqId" column="REQ_ID" />
+	 <result property="devCode" column="DEV_CODE" />
+	 <result property="windowName" column="WINDOW_NAME" />
+	 <result property="employeeCode" column="EMP_CODE" />
+	 <result property="employeeName" column="EMP_NAME" />
+	 <result property="orgCode" column="ORG_CODE" />
+	 <result property="orgName" column="ORG_NAME" />
+	 <result property="serviceCode" column="SERVICE_CODE" />
+	 <result property="serviceName" column="SERVICE_NAME" />
+	 <result property="duration" column="DURATION" />
+	 <result property="evaluatePoint" column="EVALUATE_POINT" />
+	 <result property="evaluateName" column="EVALUATE_NAME" />
+	 <result property="evaluateValue" column="EVALUATE_VALUE" />
+	 <result property="rectime" column="RECTIME" />
+	 <result property="updateTime" column="UPDATE_TIME" />
+	</resultMap>
+	
+	<insert id="save" parameterType="com.jsscom.ces.model.Evaluate" >
+		insert into td_evaluate 
+		(
+		REQ_ID,DEV_CODE,WINDOW_NAME,EMP_CODE,EMP_NAME,ORG_CODE,ORG_NAME,SERVICE_CODE,SERVICE_NAME,DURATION,
+		EVALUATE_POINT,EVALUATE_NAME,EVALUATE_VALUE,UPDATE_TIME,rectime
+		) 
+		values 
+		(
+		#{reqId,jdbcType=VARCHAR},#{devCode, jdbcType=VARCHAR},#{windowName, jdbcType=VARCHAR}, #{employeeCode, jdbcType=VARCHAR}, #{employeeName, jdbcType=VARCHAR}, 
+	    #{orgCode, jdbcType=VARCHAR},#{orgName, jdbcType=VARCHAR},#{serviceCode, jdbcType=VARCHAR},#{serviceName, jdbcType=VARCHAR},
+	    #{duration, jdbcType=NUMERIC}, #{evaluatePoint,jdbcType=VARCHAR}, #{evaluateName, jdbcType=VARCHAR},#{evaluateValue}, #{updateTime},#{rectime}
+	    )
+	</insert>
+	
+	<select id="count" parameterType="java.util.Map" resultType="_int">
+		select count(1) from td_evaluate e left join tb_organization org on e.org_code = org.code
+		<where>
+			<if test="startTime!=null and endTime!=null">
+				and e.rectime between '${startTime} 00:00:00' and '${endTime} 23:59:59'
+			</if>
+			<if test="obj.orgCode!=null and obj.orgCode!=''">
+				and e.org_code like '${obj.orgCode}%'
+			</if>
+	
+			<if test="obj.serviceCode!=null and obj.serviceCode!=''">
+				and e.service_code in (${obj.serviceCode})
+			</if>
+			<if test="obj.empField!=null and obj.empField!=''">
+				and (e.emp_code like '%${obj.empField}%' OR EMP_NAME like '%${obj.empField}%')
+			</if>
+		</where>
+		
+	</select>
+	
+	
+	<select id="queryForPage" parameterType="java.util.Map" resultMap="evaluateoMap">
+		select e.org_name,e.emp_name,e.window_name,e.service_name,e.evaluate_name,e.duration,e.rectime 
+		from td_evaluate e left join tb_organization org on e.org_code = org.code
+		<where>
+			<if test="startTime!=null and endTime!=null">
+				and e.rectime between '${startTime} 00:00:00' and '${endTime} 23:59:59'
+			</if>
+			<if test="obj.orgCode!=null and obj.orgCode!=''">
+				and e.org_code like '${obj.orgCode}%'
+			</if>
+			<if test="obj.serviceCode!=null and obj.serviceCode!=''">
+				and e.service_code  in (${obj.serviceCode})
+			</if>
+			<if test="obj.empField!=null and obj.empField!=''">
+				and (e.emp_code like '%${obj.empField}%' OR EMP_NAME like '%${obj.empField}%')
+			</if>
+		</where>
+		
+		order by rectime desc 
+		limit ${start},${limit}
+	</select>
+	
+	
+	
+	
+	
+</mapper>

@@ -1,0 +1,5 @@
+.pannel{float:left;margin:0px;position:absolute;padding:0px;border:1px solid #95B8E7;background:white;}
+.pannel .title{-moz-user-select:none;margin:0px;padding-left:6px;border-bottom:1px solid #95B8E7;height:31px;color:#0e2d5f;background:#e7f0ff;font-size:13px;font-weight:bold;line-height:30px;}
+.pannel .content{margin:0px;border:0px solid #95B8E7;padding:0px;}
+.pannel .content .tbr{margin:0px;border:0px;padding:0px;border-bottom:1px solid #95B8E7;height:31px;background:#e7f0ff;} 
+.pannel .content .pdiv{margin:0px;border:0px;padding:0px;overflow:auto;}

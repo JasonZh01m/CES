@@ -1,0 +1,18 @@
+.tgrid{position: relative; font-size:12px;border:1px solid #0054AE;}
+.tgrid .ms{width:20px;}
+.tgrid .tb-toolbar{height:30px;border-bottom:1px solid #0054AE;background-color:#EEF3F7;position: relative; margin:0px;padding:0px; overflow: hidden; border-left: 0px none !important; border-top : 0px none !important; border-right : 0px none !important;}
+.tgrid .tb-head{border-bottom:1px solid #0054AE;background-color:#22A2CF;position: relative; margin:0px;padding:0px; overflow-x: hidden; border-left: 0px none !important; border-top : 0px none !important; border-right : 0px none !important;}
+.tgrid .tb-head-tb{table-layout:fixed;border-collapse:collapse;}
+.tgrid .tb-head-tb th{border-right:1px solid #0054AE;height:20px;background-color:#22A2CF;color:#FEFFFA;font-size:14px;text-align:center;vertical-align:center;white-space:nowrap;overflow:hidden;}
+.tgrid .tb-body{position: relative; margin:0px;padding:0px; overflow-x:hidden; border-left: 0px none !important; border-top : 0px none !important; border-right : 0px none !important;}
+.tgrid .tb-body-tb{table-layout:fixed;border-collapse:collapse;}
+.tgrid .tb-body-tb td{border-right:1px solid #0054AE;border-bottom:1px solid #0054AE;height:22px;font-size:14px;vertical-align:bottom;white-space:nowrap;overflow:hidden;}
+.tgrid .tb-body-tb .odd{background-color:#F9F9F9;}
+.tgrid .tb-body-tb .clickOn{background-color:#ADD8E6;}
+.tgrid .tb-body-tb tr:hover{background-color:#EEF3F7;}
+.tgrid .tb-pager{border-top:1px solid #0054AE;height:28px;background-color:#EEF3F7;position: relative; margin:0px;padding:2px; overflow: hidden;}
+.ui-button{float:left;text-decoration:none;border-radius:3px;font-size:14px;margin:2px;background:#f6f6f6;border:1px solid #f6f6f6;padding:2px;}
+.ui-button:hover{border:1px solid #0054AE;font-size:13px;font-weight:bold;}
+.ui-separator{display:block;float:left;border-left:1px solid #ccc;border-right:1px solid #ccc;height:22px;margin:4px 0px;}
+.ui-button span{display:block;float:left;margin:2px 1px;}
+.ui-button .ui-icon{width:16px;height:16px;background-image:url("images/add.png");}

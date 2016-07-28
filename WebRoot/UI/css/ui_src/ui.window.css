@@ -1,0 +1,19 @@
+.verify{height:18px;border: 1px solid #FF9966;background-image: url(images/vf.gif);background-repeat: repeat-x;background-position: bottom;}
+.verify select{width:154px;height:22px;}
+.window{padding: 0;z-index:3;position:absolute;top:0px;left:0px;background:#E7F0FF;border:1px solid #95B8E7;}
+.modal{z-index:2;position:absolute;top:0px;left:0px;background:#99CCFF;filter:alpha(opacity=50); -moz-opacity:0.5;opacity:0.5;/*����͸����50%*/}
+.window .wtitle{border:none; margin: 0px; height:26px;}
+.window .wtitle span{display:inline-block;font-size:13px;font-weight:bold;color:#0E2D5F;margin:8px 8px;}
+.window .wtitle a{cursor:pointer;float:right;width:16px;height:16px;margin:6px 6px;background:url(icon/bullet_cross.png);}
+.window .winPanel{margin:5px; background: white;border:1px solid #95B8E7;}
+.window .winContext{margin:5px; background: white;font-size:13px;color:#0e2d5f;font-weight:bold;}
+.window .winContext form{margin:10px;border-collapse: separate;border-spacing:7px 5px;}
+.window .winContext .pannel{margin:1px;border:1px solid #95B8E7;padding:2px;}
+.window .winContext .pannel legend{font-size:12px;}
+.window .winContext .pannel .dp{margin:1px;overflow:auto;}
+.window .winContext select{width:154px;height:22px;}
+.window .btn_group{margin-top:0px;position:absolute;}
+.window .btn_group .submitIcon{background-image:url(icon/accept.png);}
+.window .btn_group .closeIcon{background-image:url(icon/decline.png);}
+.window .btn_group .clearIcon{background-image:url(icon/clear.png);}
+.ui-tooltip{background:#FFFFFF;line-height:12px;font-size:12px;position:absolute; border:2px solid #FF9966;color:red;height:12px;border-radius:3px;white-space:nowrap;}

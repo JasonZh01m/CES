@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserOrganizationRelation">
+	<resultMap type="com.jsscom.ces.model.UserOrganizationRelation" id="userOrganizationRelationMap">
+		<result property="userId" column="user_id"/>
+		<result property="orgId" column="org_id"/>
+	</resultMap>
+	
+	<sql id="sql_where">
+		<if test="userId!=null and userId>0">
+			and user_id = #{userId} 
+		</if>
+		<if test="orgId!=null and orgId!=''">
+			and org_id = #{orgId} 
+		</if>
+	</sql>
+	
+	<select id="queryByUserId" parameterType="int" resultMap="userOrganizationRelationMap">
+		select * from tb_user_organization_relation where user_id = #{userId}
+	</select>
+	
+	<select id="queryByOrgan" parameterType="int" resultMap="userOrganizationRelationMap">
+		select * from tb_user_organization_relation where org_id = #{orgId}
+	</select>
+	
+	<delete id="deleteByUserOrganizationRelation" parameterType="com.jsscom.ces.model.UserOrganizationRelation">
+		delete from tb_user_organization_relation
+		<where>
+			<include refid="sql_where"/>
+		</where>
+	</delete>
+	
+	
+	<insert id="save" parameterType="com.jsscom.ces.model.UserOrganizationRelation">
+		insert into tb_user_organization_relation(user_id,org_id) 
+		values 
+		(#{userId},#{orgId}) 
+	</insert>
+	
+</mapper>

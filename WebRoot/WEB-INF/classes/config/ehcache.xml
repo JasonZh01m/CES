@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+  <diskStore path="java.io.tmpdir/tmp"/> 
+       <!--    <diskStore path="D:/cache/tmp"/> -->
+
+   <cache name="LevelOneCache"
+        maxElementsInMemory="15000"
+        maxElementsOnDisk="45000"
+        eternal="false"
+        overflowToDisk="true"
+        timeToIdleSeconds="900"
+        timeToLiveSeconds="3600"
+        memoryStoreEvictionPolicy="LFU"/>
+</ehcache>

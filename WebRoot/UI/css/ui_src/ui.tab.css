@@ -1,0 +1,10 @@
+.u-tab{padding:0px;margin:0px;}
+.u-tab .tabtbr{-moz-user-select:none;margin:0px;border:0px;padding:0px;border-bottom:1px solid #95B8E7;height:31px;background:#e7f0ff;} 
+.u-tab .tabpannel{margin:1px;padding:0px;border:1px solid #95B8E7;background:white;}
+.u-tab .tabInf{margin:0px;padding:0px;}
+.u-tab ul{display: block;overflow: hidden;padding:0px;margin:0px;font-size:13px;font-weight:bold;}
+.u-tab li{margin:2px 2px 0px 3px;color:#0E2D5F;border:1px solid #95B8E7;float: left;display: block;overflow:hidden;height: 23px;}
+.u-tab span{-moz-user-select:none;cursor:pointer;display:block;margin:2px 4px 2px 2px;float:left;color:#0E2D5F;;font-size:13px;font-weight:bold;}
+.u-tab .close{width:17px;height:17px;margin-left:0px;background-image:url(icon/c2.png);}
+.u-tab .liup {padding: 5px 1px 0px 5px;background:#F9F9F9;}
+.u-tab .lidown{border-bottom:0px;float:left;padding: 5px 1px 1px 5px;background:#FFFFFF;color:#020004;}

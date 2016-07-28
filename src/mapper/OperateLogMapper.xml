@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OperateLog">
+
+	<resultMap type="com.jsscom.ces.model.OperateLog" id="logMap">	
+	 <result property="logId" column="LOG_ID" />
+	 <result property="userId" column="USER_ID" />
+	 <result property="logContent" column="LOG_CONTENT" />
+	 <result property="logType" column="LOG_TYPE" />
+	 <result property="logDate" column="LOG_DATE" />
+	</resultMap>
+
+	<sql id="sql_where">
+		<if test="logId!=null and logId>0">
+			and log_id = #{logId}
+		</if>
+		<if test="userId!=null and userId>0">
+			and USER_ID = #{userId}
+		</if>
+		<if test="logType!=null and logType!=''">
+			and LOG_TYPE = #{logType}
+		</if>
+	</sql>
+
+
+	<select id="count" parameterType="com.jsscom.ces.model.OperateLog"
+		resultType="int">
+		select count(1) from TD_LOG
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+
+
+	<select id="queryById" parameterType="int" resultMap="logMap">
+		select *
+		from TD_LOG where log_id=#{logId}
+	</select>
+
+	<select id="queryByOperateLog" parameterType="int" resultMap="logMap">
+		select * from TD_LOG 
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+
+</mapper>

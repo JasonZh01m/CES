@@ -1,0 +1,13 @@
+.searchBar{width:100%;background: #F9F9F9;border-bottom:1px solid #95B8E7;display:inline-block;}
+.searchBar .formContext{padding:0px;margin:0px;float:left;}
+.searchBar .btnContext{float:left;}
+.searchBar .last{height:32px;padding:2px;float:left;margin:4px;}
+.searchBar .btnContext button{height:26px;}
+.searchBar .btnContext span{margin:2px 2px;}
+.searchBar ul {display:block;overflow: hidden;padding:5px;margin:0px;}
+.searchBar li {float: left;display: block;overflow: hidden;height: 26x;padding: 2px 5px;}
+.searchBar label{vertical-align:middle;height:17px;line-height:17px;padding-right:1px;margin:4px 0px;font-size:13px;color:#0e2d5f;display:inline-block;font-weight:bold;}
+.searchBar input{ height:16px;padding: 2px 2px; margin: 3px 0px; line-height:12px;font-size:12px;border-style: solid;border-color: #95B8E7;border-width: 1px;}
+.searchBar select{border:1px solid #95B8E7;height:22px; margin: 3px 0px; width:133px;}
+.searchBar .verify{border: 1px solid #FF9966;background-image: url(images/vf.gif);background-repeat: repeat-x;background-position: bottom;}
+.searchBar .verify select{width:154px;height:22px;}

@@ -1,0 +1,12 @@
+body {
+padding:0px;
+margin:0px;
+cursor:default;
+overflow:auto;
+/* overflow-x:hidden; */
+position:relative;
+font-family:"宋体",tahoma,arial,verdana,sans-serif;
+}
+.ui-jqgrid-sortable {font-size:12px;}   /*修改列名的字体大小*/         
+.ui-jqgrid tr.jqgrow td {font-size:12px; font-family:"宋体",tahoma,arial,verdana,sans-serif;} /*修改表格内容字体*/ 
+button span{font-size:12px; font-family:"宋体",tahoma,arial,verdana,sans-serif;}

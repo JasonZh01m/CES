@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CarInfoTemp">
+	
+	<resultMap type="com.jsscom.ces.model.CarInfoTemp" id="carInfoTempMap">
+		<result property="id" column="ID" />
+		<result property="emunumber" column="EMUNUMBER" />
+		<result property="carindex" column="CARINDEX" />
+		<result property="cartype" column="CARTYPE" />
+		<result property="num1" column="NUM1" />
+		<result property="num2" column="NUM2" />
+		<result property="num3" column="NUM3" />
+		<result property="num4" column="NUM4" />
+		<result property="num5" column="NUM5" />
+		<result property="num6" column="NUM6" />
+		<result property="num7" column="NUM7" />
+		<result property="num8" column="NUM8" />
+		<result property="allnum" column="ALLNUM" />
+		<result property="ichnography" column="ICHNOGRAPHY" />
+	</resultMap>
+
+	<sql id="sql_where">
+		<if test="id!=null and id!=''">
+			and id = #{id}
+		</if>
+		<if test="emunumber!=null and emunumber!=''">
+			and emunumber = #{emunumber}
+		</if>
+		<if test="carindex>-1">
+			and carindex = #{carindex}
+		</if>
+		<if test="cartype>-1">
+			and cartype = #{cartype}
+		</if>
+	</sql>
+
+
+	<select id="count" parameterType="com.jsscom.ces.model.CarInfoTemp"
+		resultType="_int">
+		select count(1) from td_carinfo_temp
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+
+
+	<select id="queryById" parameterType="int" resultMap="carInfoTempMap">
+		select * from td_carinfo_temp where id=#{id}
+	</select>
+
+
+
+	<select id="queryForPage" parameterType="java.util.Map"
+		resultMap="carInfoTempMap">
+
+		<!--select * from td_carinfo_temp
+		where
+		rowid in
+		(
+		select rid from
+		(
+		select rownum rn,rid from
+		(
+		select rowid rid,id from td_carinfo_temp
+		<where>
+			<if test="obj!=null">
+				<if test="obj.emunumber!=null and obj.emunumber!=''">
+					and emunumber = #{obj.emunumber}
+				</if>
+				<if test="obj.carindex>-1">
+					and carindex = #{obj.carindex}
+				</if>
+				<if test="obj.cartype>-1">
+					and cartype = #{obj.cartype}
+				</if>
+				<if test="obj.num1>-1">
+					and num1 = #{obj.num1}
+				</if>
+				<if test="obj.num2>-1">
+					and num2 = #{obj.num2}
+				</if>
+				<if test="obj.num3>-1">
+					and num3 = #{obj.num3}
+				</if>
+				<if test="obj.num4>-1">
+					and num4 = #{obj.num4}
+				</if>
+			</if>
+		</where>
+		order by id desc
+		)
+			<![CDATA[
+		   where rownum<#{end}
+		  )
+		where rn>#{start}
+		) order by id desc
+			]]> -->
+		select * from td_carinfo_temp 
+		<where>
+			<if test="obj!=null">
+				<if test="obj.emunumber!=null and obj.emunumber!=''">
+					and emunumber = #{obj.emunumber}
+				</if>
+				<if test="obj.carindex>-1">
+					and carindex = #{obj.carindex}
+				</if>
+				<if test="obj.cartype>-1">
+					and cartype = #{obj.cartype}
+				</if>
+				<if test="obj.num1>-1">
+					and num1 = #{obj.num1}
+				</if>
+				<if test="obj.num2>-1">
+					and num2 = #{obj.num2}
+				</if>
+				<if test="obj.num3>-1">
+					and num3 = #{obj.num3}
+				</if>
+				<if test="obj.num4>-1">
+					and num4 = #{obj.num4}
+				</if>
+			</if>
+		</where> order by id desc limit ${obj.end}, ${obj.start}
+	</select>
+
+
+
+	<insert id="save" parameterType="com.jsscom.ces.model.CarInfoTemp">
+	    <selectKey keyProperty="id" resultType="int" order="BEFORE">
+         select CARINFO_TEMP_INDEX_SEQ.nextval from dual
+         </selectKey>
+		insert into td_carinfo_temp
+		(id,emunumber,carindex,cartype,num1,num2,num3,num4,num5 ,num6,num7
+		,num8,allnum,ichnography)
+		values
+		(#{id},#{emunumber,jdbcType=VARCHAR},#{carindex},#{cartype},#{num1},#{num2},#{num3},#{num4},#{num5},#{num6},#{num7},#{num8},#{allnum},#{ichnography,jdbcType=VARCHAR})
+	</insert>
+
+
+	<update id="updateById" parameterType="com.jsscom.ces.model.CarInfoTemp">
+		update td_carinfo_temp
+		<set>
+			<if test="emunumber!=null and emunumber!=''">
+				emunumber = #{emunumber},
+			</if>
+			<if test="carindex>-1">
+				carindex = #{carindex},
+			</if>
+			<if test="cartype>-1">
+				cartype = #{cartype},
+			</if>
+			<if test="num1>-1">
+				num1 = #{num1},
+			</if>
+			<if test="num2>-1">
+				num2 = #{num2},
+			</if>
+			<if test="num3>-1">
+				num3 = #{num3},
+			</if>
+			<if test="num4>-1">
+				num4 = #{num4},
+			</if>
+			<if test="num5>-1">
+				num5 = #{num5},
+			</if>
+			<if test="num6>-1">
+				num6 = #{num6},
+			</if>
+			<if test="num7>-1">
+				num7 = #{num7},
+			</if>
+			<if test="num8>-1">
+				num8 = #{num8},
+			</if>
+			<if test="allnum>-1">
+				allnum = #{allnum},
+			</if>
+			<if test="ichnography!=null and ichnography!=''">
+				ichnography = #{ichnography,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	
+	
+	<delete id="deleteById" parameterType="int">
+		delete from td_carinfo_temp where id=#{id}
+	</delete>
+	
+    <select id="iterator" parameterType="com.jsscom.ces.model.CarInfoTemp" resultType="int">
+		select id from td_carinfo_temp 
+        <where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DevInfo">
+
+	<resultMap type="com.jsscom.ces.model.DevInfo" id="devInfoMap">	
+	 <result property="id" column="ID" />
+	 <result property="code" column="code" />
+	 <result property="serialNo" column="dev_sn" />
+	 <result property="ip" column="ip" />
+	 <result property="mac" column="mac" />	 
+	 <result property="orgCode" column="org_code" />
+	 <result property="orgName" column="org_name" />
+	 <result property="windowName" column="window_name" />
+	 <result property="auditStatus" column="audit_status" />
+	 <result property="auditUserId" column="audit_user_id" />
+	 <result property="auditUserName" column="audit_user_name" />
+	 <result property="createTime" column="create_time" />
+	 <result property="installTime" column="install_time" />
+	</resultMap>
+
+	<sql id="sql_where">
+		<if test="orgId!=null and orgId!=''">
+			and org.id in (${orgId})
+		</if>
+		<if test="code!=null and code!=''">
+			and code like '%${code}%' 
+		</if>
+		<if test="auditStatus>-1">
+			and audit_status = #{auditStatus} 
+		</if>
+		<if test="orgCode!=null and orgCode!=''">
+			and org_code = #{orgCode} 
+		</if>
+	</sql>
+	
+	
+	
+	<select id="queryByClient" parameterType="com.jsscom.ces.model.DevInfo" resultMap="devInfoMap">
+		select code,ip,mac,org_code,org_name,window_name,audit_Status from tb_dev
+		<where>
+			<if test="code!=null and code!=''">
+				and code = #{code}
+			</if>
+			<if test="serialNo!=null and serialNo!=''">
+				and dev_sn = #{serialNo} 
+			</if>
+			<if test="ip!=null and ip!=''">
+				and ip = #{ip} 
+			</if>
+			<if test="mac!=null and mac!=''">
+				and mac = #{mac} 
+			</if>
+		</where>
+	</select>
+	
+	
+	
+	
+	
+	
+	
+
+
+	<select id="count" parameterType="com.jsscom.ces.model.DevInfo"
+		resultType="int">
+		select count(1) from tb_dev d left join tb_organization org
+			on d.org_code = org.code
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+	
+	<select id="queryForPage" parameterType="java.util.Map" resultMap="devInfoMap">
+		select d.id,
+			d.code,
+			d.dev_sn,
+			d.ip,
+	  		d.mac,
+	 		d.org_code,
+	 		org.name as orgName,
+			d.window_name,
+	 		d.audit_status,
+	 		d.audit_user_id,
+			d.audit_user_name,
+	 		d.create_time,
+	 		d.install_time,
+	 		org.id
+		from tb_dev d left join tb_organization org
+			on d.org_code = org.code
+		<where>
+			<if test="obj!=null">
+				<if test="obj.orgId!=null and obj.orgId!=''">
+					and org.id in (${obj.orgId})
+				</if>
+				<if test="obj.code!=null and obj.code!=''">
+					and d.dev.code like '%${obj.code}%' 
+				</if>
+				<if test="obj.auditStatus>-1">
+					and d.audit_status = #{obj.auditStatus} 
+				</if>
+			</if>
+		</where>
+		order by d.id desc limit ${start}, ${limit}
+	</select>
+	
+	<select id="queryByInfo" parameterType="com.jsscom.ces.model.DevInfo" resultMap="devInfoMap">
+		select *
+		from tb_dev
+		<where>
+			<if test="code!=null and code!=''">
+				and code = #{code}
+			</if>
+			<if test="auditStatus!=null and auditStatus!=''">
+				and audit_status = #{auditStatus} 
+			</if>
+			<if test="orgCode!=null and orgCode!=''">
+				and org_code = #{orgCode} 
+			</if>
+		</where>
+	</select>
+
+
+	<select id="queryById" parameterType="int" resultMap="devInfoMap" >
+		select d.id,
+			d.code,
+			d.dev_sn,
+			d.ip,
+	  		d.mac,
+	 		d.org_code,
+	 		org.name as orgName,
+			d.window_name,
+	 		d.audit_status,
+	 		d.audit_user_id,
+			d.audit_user_name,
+	 		d.create_time,
+	 		d.install_time
+		from tb_dev d left join tb_organization org
+			on d.org_code = org.code
+		where d.id=#{id}
+	</select>
+	
+	
+	<select id="queryByCode" parameterType="string" resultMap="devInfoMap" >
+		select d.id,d.code,d.dev_sn,d.ip,d.mac,d.org_code,d.window_name,d.audit_status,d.audit_user_id,d.audit_user_name,d.create_time,d.install_time,o.name as orgName,o.id as orgId from
+        (
+        select id,code,dev_sn,ip,mac,org_code,window_name,audit_status,audit_user_id,audit_user_name,create_time,install_time 
+        from tb_dev 
+        where code=#{code}
+        ) as d 
+        left join tb_organization as o on d.org_code=o.code
+	</select>
+	
+	<insert id="save" parameterType="com.jsscom.ces.model.DevInfo" >
+		
+		insert into tb_dev (code, org_code,dev_sn, ip, mac, window_name, audit_status, audit_user_id,
+		audit_user_name, create_time, install_time,org_name) values 
+			(#{code, jdbcType=VARCHAR},#{orgCode, jdbcType=VARCHAR}, #{serialNo, jdbcType=VARCHAR}, #{ip, jdbcType=VARCHAR}, 
+			 #{mac, jdbcType=VARCHAR}, #{windowName, jdbcType=VARCHAR},
+			 #{auditStatus, jdbcType=NUMERIC}, #{auditUserId, jdbcType=NUMERIC}, #{auditUserName, jdbcType=VARCHAR},
+			 #{createTime, jdbcType=TIMESTAMP}, #{installTime, jdbcType=TIMESTAMP}, #{orgName})
+		<selectKey resultType="java.lang.Integer" keyProperty="id">  
+	     	select last_insert_id()
+	    </selectKey>  
+	</insert>
+	
+	<update id="updateById" parameterType="com.jsscom.ces.model.DevInfo">
+		update tb_dev
+		<set>
+			<if test="code!=null and code!=''">
+				code = #{code}, 
+			</if>
+			<if test="serialNo!=null and serialNo!=''">
+				dev_sn = #{serialNo},  
+			</if>
+			<if test="mac!=null and mac!=''">
+				mac = #{mac},  
+			</if>
+			<if test="orgCode!=null and orgCode!=''">
+				org_code = #{orgCode},
+			</if>
+			<if test="orgName!=null and orgName!=''">
+				org_name = #{orgName},
+			</if>
+			<if test="windowName!=null and windowName!=''">
+				window_name = #{windowName}, 
+			</if>
+			<if test="auditStatus>-1">
+				audit_Status = #{auditStatus}, 
+			</if>
+			<if test="createTime!=null and createTime!=''">
+				create_time = #{createTime}, 
+			</if>
+			 install_time = #{installTime, jdbcType=TIMESTAMP}, 
+			 audit_user_id = #{auditUserId},
+			 audit_user_name = #{auditUserName},
+		</set>
+		
+		where id=#{id} 
+	</update>
+	
+	<update id="updateBySaveId" parameterType="com.jsscom.ces.model.DevInfo">
+		update tb_dev
+		<set>
+			<if test="code!=null and code!=''">
+				code = #{code}, 
+			</if>
+		</set>
+		where id=#{id} 
+	</update>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from tb_dev where id = #{id}
+	</delete>
+	
+	<select id="queryDevByCode" parameterType="java.lang.String" resultType="_int">
+		select count(1) from tb_dev where code = #{code}
+	</select>
+	
+	<select id="validateUnique" parameterType="java.util.Map" resultType="_int">
+		select 1 from tb_dev where ${field} = #{value}
+	</select>
+	
+</mapper>

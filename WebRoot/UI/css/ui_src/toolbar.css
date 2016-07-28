@@ -1,0 +1,8 @@
+.u-tbr{-moz-user-select:none;margin:0px;border:0px;padding:0px;border-bottom:1px solid #95B8E7;height:30px;background:#e7f0ff;} 
+.u-button{cursor:pointer;line-height:16px;padding:2px;border:1px solid #e7f0ff;float:left;text-decoration:none;border-radius:3px;font-size:13px;font-weight:bold;margin:2px;color:#0E2D5F;background:#e7f0ff;}
+.u-button-sd{border:1px solid #95B8E7;background:#F9F9F9;padding:2px 4px;}
+.u-button-sp{z-index:2; position:absolute;top:2px;right:px;border:1px solid #95B8E7;background:#F9F9F9;color:#020004;}
+.u-button:hover{border:1px solid #95B8E7;background:#F9F9F9;color:#020004;}
+.u-separator{display:block;float:left;border-right:1px solid #ccc;height:22px;margin:4px 0px;}
+.u-button span{display:block;float:left;margin:2px 2px 2px 1px;}
+.u-button .u-icon{width:16px;height:16px;}

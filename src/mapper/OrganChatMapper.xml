@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OrganChat">
+
+	<resultMap type="com.jsscom.ces.model.OrganChat" id="organChatMap">	
+		<result property="orgName" column="org_name" />
+		<result property="orgYear" column="org_year" />
+		<result property="rectime" column="rectime" />
+		<result property="agvSatis" column="agv_satis" />
+	</resultMap>
+	
+	
+	<resultMap type="com.jsscom.ces.vo.MonthLineChartBean" id="MonthLineChartMap">
+		<result property="month1" column="month1" />
+		<result property="month2" column="month2" />
+		<result property="month3" column="month3" />
+		<result property="month4" column="month4" />
+		<result property="month5" column="month5" />
+		<result property="month6" column="month6" />
+		<result property="month7" column="month7" />
+		<result property="month8" column="month8" />
+		<result property="month9" column="month9" />
+		<result property="month10" column="month10" />
+		<result property="month11" column="month11" />
+		<result property="month12" column="month12" />
+	</resultMap>
+	
+	<select id="queryForOrgChat" parameterType="java.util.Map" resultMap="MonthLineChartMap">
+		select 
+        count(case when point+0&lt;5 and month(rectime)=1 then 1 end)/count(case when month(rectime)=1 then 1 end) as 'month1',
+        count(case when point+0&lt;5 and month(rectime)=2 then 1 end)/count(case when month(rectime)=2 then 1 end) as 'month2',
+        count(case when point+0&lt;5 and month(rectime)=3 then 1 end)/count(case when month(rectime)=3 then 1 end) as 'month3',
+        count(case when point+0&lt;5 and month(rectime)=4 then 1 end)/count(case when month(rectime)=4 then 1 end) as 'month4',
+        count(case when point+0&lt;5 and month(rectime)=5 then 1 end)/count(case when month(rectime)=5 then 1 end) as 'month5',
+        count(case when point+0&lt;5 and month(rectime)=6 then 1 end)/count(case when month(rectime)=6 then 1 end) as 'month6',
+        count(case when point+0&lt;5 and month(rectime)=7 then 1 end)/count(case when month(rectime)=7 then 1 end) as 'month7',
+        count(case when point+0&lt;5 and month(rectime)=8 then 1 end)/count(case when month(rectime)=8 then 1 end) as 'month8',
+        count(case when point+0&lt;5 and month(rectime)=9 then 1 end)/count(case when month(rectime)=9 then 1 end) as 'month9',
+        count(case when point+0&lt;5 and month(rectime)=10 then 1 end)/count(case when month(rectime)=10 then 1 end) as 'month10',
+        count(case when point+0&lt;5 and month(rectime)=11 then 1 end)/count(case when month(rectime)=11 then 1 end) as 'month11',
+        count(case when point+0&lt;5 and month(rectime)=12 then 1 end)/count(case when month(rectime)=12 then 1 end) as 'month12' 
+        from 
+        (
+        select evaluate_point as point,rectime from td_evaluate 
+        where  year(rectime)=#{year} 
+        <if test="serviceCode!=null and serviceCode!=''">
+			and service_code in (${serviceCode})
+		</if>
+		<if test="orgCode!=null and orgCode!=''">
+			and org_code like '${orgCode}%'
+		</if>
+        ) yd 
+	</select>
+	
+
+	<sql id="sql_where">
+		<if test="startTime!=null and endTime!=null">
+			AND RECTIME between '${startTime}' and '${endTime}'
+		</if>
+		<if test="orgCode!=null and orgCode!=''">
+			AND ORG_CODE = #{obj.orgCode}
+		</if>
+
+		<if test="serviceCode!=null and serviceCode!=''">
+			AND SERVICE_CODE = #{serviceCode}
+		</if>
+		<if test="empField!=null and empField!=''">
+			AND (EMP_CODE like '%${empField}%' OR EMP_NAME like '%${empField}%')
+		</if>
+	</sql>
+
+	
+	<select id="queryForPage" parameterType="java.util.Map" resultMap="organChatMap">
+		 select org_name, 
+		    max(case when month(a.rectime)=1 and year(a.rectime) = #{year} then a.agv_satis else 0 end) as month1,
+			max(case when month(a.rectime)=2 and year(a.rectime) = #{year} then a.agv_satis else 0 end) as month2,
+			max(case when month(a.rectime)=3 and year(a.rectime) = #{year} then a.agv_satis else 0 end) as month3,
+			max(case when month(a.rectime)=4 and year(a.rectime) = #{year} then a.agv_satis else 0 end) as month4,
+			max(case when month(a.rectime)=5 and year(a.rectime) = #{year} then a.agv_satis else 0 end) as month5,
+			max(case when month(a.rectime)=6 and year(a.rectime) = #{year} then a.agv_satis else 0 end) as month6,
+			max(case when month(a.rectime)=7 and year(a.rectime) = #{year} then a.agv_satis else 0 end) as month7,
+			max(case when month(a.rectime)=8 and year(a.rectime) = #{year} then a.agv_satis else 0 end) as month8,
+			max(case when month(a.rectime)=9 and year(a.rectime) = #{year} then a.agv_satis else 0 end) as month9,
+			max(case when month(a.rectime)=10 and year(a.rectime) = #{year} then a.agv_satis else 0 end) as month10,	
+			max(case when month(a.rectime)=11 and year(a.rectime) = #{year} then a.agv_satis else 0 end) as month11,
+			max(case when month(a.rectime)=12 and year(a.rectime) = #{year} then a.agv_satis else 0 end) as month12
+		from (select tt.org_code, tt.org_name, tt.rectime, tt.agv_satis from(select org_code, org_name, rectime,
+		avg(t.evaluate_value/10) as agv_satis
+		 from td_evaluate t 
+		group by month(rectime) , year(rectime), org_code) tt
+		where  year(tt.rectime) = #{year}) a group by org_name
+	</select>
+	
+	
+	
+	
+</mapper>

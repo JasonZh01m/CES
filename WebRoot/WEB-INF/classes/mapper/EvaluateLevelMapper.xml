@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="EvaluateLevel">
+
+	<resultMap type="com.jsscom.ces.model.EvaluateLevel" id="evaluateLevelMap">
+		<result property="level" column="level" />
+		<result property="value" column="value" />
+		<result property="name" column="name" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+	<sql id="sql_where">
+		<if test="level>0">
+			and level = #{level}
+		</if>
+		<if test="name!=null and name!=''">
+			and name like '%${name}%'
+		</if>
+	</sql>
+
+	<select id="count" parameterType="com.jsscom.ces.model.EvaluateLevel"
+		resultType="int">
+		select count(1) from tb_evaluate_level
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+	
+	<select id="queryForPage" parameterType="java.util.Map" resultMap="evaluateLevelMap">
+		select level, 
+			   value, 
+			   name, 
+			   remark
+		from tb_evaluate_level ee
+		<where>
+			<if test="obj!=null">
+				<if test="obj.level>0">
+					and level = #{obj.level}
+				</if>
+				<if test="obj.name!=null and obj.name!=''">
+					and name like '%${obj.name}%' 
+				</if>
+			</if>
+		</where>
+		order by level desc limit ${start}, ${limit}
+	</select>
+	
+	<insert id="save" parameterType="com.jsscom.ces.model.EvaluateLevel" >
+		insert into tb_evaluate_level 
+		(
+			level,name,value,remark
+		) 
+		values 
+		(
+			#{level,jdbcType=NUMERIC},#{name, jdbcType=VARCHAR}, 
+		    #{value, jdbcType=NUMERIC}, #{remark,jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+
+	<select id="queryById" parameterType="int" resultMap="evaluateLevelMap" >
+		select level, name, value, remark
+		from tb_evaluate_level
+		where level=#{level}
+	</select>
+	
+	<update id="updateById" parameterType="com.jsscom.ces.model.EvaluateLevel">
+		update tb_evaluate_level
+		<set>
+			<if test="name!=null and name!=''">
+				name = #{name}, 
+			</if>
+			<if test="value>0">
+				value = #{value},  
+			</if>
+			<if test="remark!=null and remark!=''">
+				remark = #{remark},  
+			</if>
+		</set>
+		
+		where level=#{level} 
+	</update>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from tb_evaluate_level where level = #{id}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="EmployeePhoto">
+
+	<resultMap type="com.jsscom.ces.model.EmployeePhoto" id="employeePhotoMap">
+		<result property="id" column="id" />
+		<result property="employeeName" column="employee_name" />
+		<result property="employeeNumber" column="employee_number" />
+		<result property="organName" column="organ_name" />
+		<result property="hpImgName" column="hp_img_name" />
+		<result property="hpImgPath" column="hp_img_path" />
+		<result property="hpImgUrl" column="hp_img_url" />
+		<result property="hpImgMd5" column="hp_img_md5" />
+		<result property="certificateName" column="certificate_name" />
+		<result property="certificatePath" column="certificate_path" />
+		<result property="certificateUrl" column="certificate_url" />
+		<result property="certificateMd5" column="certificate_md5" />
+		<result property="updateTime" jdbcType="TIMESTAMP" column="update_time"  javaType="java.util.Date" />
+	</resultMap>
+
+	<sql id="sql_where">
+		<if test="employeeName!=null and employeeName!=''">
+			and employee_name like '%${employeeName}%' 		
+		</if>
+		<if test="employeeNumber!=null and employeeNumber!=''">
+			and employee_number like '%${employeeNumber}%'
+		</if>
+		<if test="organName!=null and organName!=''">
+			and organ_name like '%${organName}%'
+		</if>
+	</sql>
+
+	<select id="count" parameterType="com.jsscom.ces.model.EmployeePhoto"
+		resultType="int">
+		select count(1) from tb_emplyee_photo
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+	
+	<select id="queryForPage" parameterType="java.util.Map" resultMap="employeePhotoMap">
+		select id,employee_name,employee_number,organ_name,hp_img_name,hp_img_path,hp_img_url,hp_img_md5,certificate_name,certificate_path,certificate_url,certificate_md5,update_time 
+		from tb_emplyee_photo
+		<where>
+			<if test="obj!=null">
+				<if test="obj.employeeName!=null and obj.employeeName!=''">
+					and employee_name like '%${obj.employeeName}%' 	
+				</if>
+				<if test="obj.employeeNumber!=null and obj.employeeNumber!=''">
+			        and employee_number like '%${obj.employeeNumber}%'
+		        </if>
+		        <if test="obj.organName!=null and obj.organName!=''">
+			        and organ_name like '%${obj.organName}%'
+		        </if>
+			</if>
+		</where>
+		order by id desc limit ${start}, ${limit}
+	</select>
+	
+	
+	<insert id="save" parameterType="com.jsscom.ces.model.EmployeePhoto" >
+		insert into tb_emplyee_photo 
+		(
+			employee_name,employee_number,organ_name,hp_img_name,hp_img_path,hp_img_url,hp_img_md5,certificate_name,certificate_path,certificate_url,certificate_md5,update_time
+		) 
+		values 
+		(
+		    #{employeeName, jdbcType=VARCHAR}, 
+		    #{employeeNumber, jdbcType=VARCHAR},
+		    #{organName, jdbcType=VARCHAR},
+		    #{hpImgName, jdbcType=VARCHAR},
+		    #{hpImgPath, jdbcType=VARCHAR},
+		    #{hpImgUrl, jdbcType=VARCHAR},
+		    #{hpImgMd5, jdbcType=VARCHAR},
+		    #{certificateName, jdbcType=VARCHAR},
+		    #{certificatePath, jdbcType=VARCHAR},
+		    #{certificateUrl, jdbcType=VARCHAR},
+		    #{certificateMd5, jdbcType=VARCHAR},
+		    #{updateTime, jdbcType=TIMESTAMP}
+	    )
+	</insert>
+	
+	<select id="queryById" parameterType="int" resultMap="employeePhotoMap" >
+		select id,employee_name,employee_number,organ_name,hp_img_name,hp_img_path,hp_img_url,hp_img_md5,
+		certificate_name,certificate_path,certificate_url,certificate_md5,update_time 
+		from tb_emplyee_photo
+		where id=#{id}
+	</select>
+	
+	<update id="updateById" parameterType="com.jsscom.ces.model.EmployeePhoto">
+		update tb_emplyee_photo
+		<set>
+			<if test="employeeName!=null and employeeName!=''">
+				employee_name = #{employeeName}, 
+			</if>
+			<if test="employeeNumber!=null and employeeNumber!=''">
+				employee_number = #{employeeNumber}, 
+			</if>
+			<if test="organName!=null and organName!=''">
+				organ_name = #{organName}, 
+			</if>
+			<if test="hpImgName!=null and hpImgName!=''">
+				hp_img_name = #{hpImgName}, 
+			</if>
+			<if test="hpImgPath!=null and hpImgPath!=''">
+				hp_img_path = #{hpImgPath}, 
+			</if>
+			<if test="hpImgUrl!=null and hpImgUrl!=''">
+				hp_img_url = #{hpImgUrl}, 
+			</if>
+			<if test="hpImgMd5!=null and hpImgMd5!=''">
+				hp_img_md5 = #{hpImgMd5}, 
+			</if>
+			<if test="certificateName!=null and certificateName!=''">
+				certificate_name = #{certificateName}, 
+			</if><if test="certificatePath!=null and certificatePath!=''">
+				certificate_path = #{certificatePath}, 
+			</if>
+			<if test="certificateUrl!=null and certificateUrl!=''">
+				certificate_url = #{certificateUrl}, 
+			</if>
+			<if test="certificateMd5!=null and certificateMd5!=''">
+				certificate_md5 = #{certificateMd5}, 
+			</if>
+			<if test="updateTime!=null and updateTime!=''">
+				update_time = #{updateTime}, 
+			</if>
+		</set>
+		where id=#{id} 
+	</update>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from tb_emplyee_photo where id = #{id}
+	</delete>
+	
+	<select id="queryEmployeePhoto" resultMap="employeePhotoMap">
+		select employee_name,employee_number,organ_name,hp_img_name,hp_img_path,hp_img_url,hp_img_md5,
+		certificate_name,certificate_path,certificate_url,certificate_md5,update_time  from tb_emplyee_photo 
+	</select>
+	
+	<select id="queryPic" resultMap="employeePhotoMap" parameterType="java.lang.String" >
+		select employee_name,employee_number,organ_name,hp_img_name,hp_img_path,hp_img_url,hp_img_md5,
+		certificate_name,certificate_path,certificate_url,certificate_md5,update_time  from tb_emplyee_photo 
+		where  hp_img_md5 = #{_parameter} or certificate_md5 = #{_parameter}
+	</select>
+	
+	<select id="getEmployee" resultMap="employeePhotoMap" parameterType="java.lang.String" >
+		select employee_name,employee_number,organ_name,hp_img_name,hp_img_path,hp_img_url,hp_img_md5,
+		certificate_name,certificate_path,certificate_url,certificate_md5,update_time  from tb_emplyee_photo 
+		<where>
+		<if test="_parameter!=null and _parameter!=''">
+			and	employee_number = #{_parameter}
+		</if>
+		</where>
+	</select>
+	
+</mapper>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="User">
+	<resultMap type="com.sq.sso.model.User" id="userMap">	
+	 <result property="id" column="ID" />
+	 <result property="loginName" column="LOGIN_NAME" />
+	 <result property="userName" column="USER_NAME" />
+	 <result property="passWord" column="PASSWORD" />
+	 <result property="saltCode" column="SALT_CODE" />
+	 <result property="sex" column="SEX" />
+	 <result property="phone" column="PHONE" />
+	 <result property="email" column="EMAIL" />
+	 <result property="address" column="ADDRESS" />
+	 <result property="unit" column="UNIT" />
+	 <result property="timeLimit" column="TIME_LIMIT" />
+	 <result property="ip" column="IP" />
+	 <result property="regDate" column="REG_DATE" />
+	 <result property="expireDate" column="EXPIRE_DATE" />
+	 <result property="level" column="LEVEL" />
+	 <result property="userCardId" column="USER_CARD_ID" />
+	 <result property="validStatus" column="VALID_STATUS" />
+	 <result property="remark" column="REMARK" />
+	 <result property="errorNum" column="ERROR_NUM" />
+	 <result property="currentDate" column="CURRENTDATE" />
+	 <result property="orgCode" column="org_code" />
+	</resultMap>
+
+	<sql id="sql_where">
+		<if test="loginName!=null and loginName!=''">
+			and login_name = #{loginName}
+		</if>
+		<if test="userName!=null and userName!=''">
+			and user_name = #{userName}
+		</if>
+		
+		<if test="sex!=null and sex!=''">
+			and sex = #{sex}
+		</if>
+
+		<if test="validStatus!=null and validStatus!=''">
+			and valid_status = #{validStatus}
+		</if>
+		<if test="remark!=null and remark!=''">
+			and remark = #{remark}
+		</if>
+<!-- 		<if test="errorNum!=null and errorNum!=''">
+			and error_Num = #{errorNum}
+		</if>
+		<if test="currentDate!=null and currentDate!=''">
+			and current_Date = #{currentDate}
+		</if> -->
+	</sql>
+
+
+	<select id="count" parameterType="com.sq.sso.model.User"
+		resultType="_int">
+		select count(1) from tb_user
+		<where>
+		<if test="loginName!=null and loginName!=''">
+			and login_name like '%${loginName}%'
+		</if>
+		<if test="userName!=null and userName!=''">
+			and user_name like '%${userName}%'
+		</if>
+		<if test="sex!=null and sex!=''">
+			and sex = #{sex}
+		</if>
+		<if test="validStatus!=null and validStatus!=''">
+			and valid_status = #{validStatus}
+		</if>
+			<!-- <include refid="sql_where" /> -->
+		</where>
+	</select>
+
+
+	<select id="queryById" parameterType="int" resultMap="userMap">
+		select *
+		from tb_user where id=#{id}
+	</select>
+
+	<select id="queryByUser" parameterType="int" resultMap="userMap">
+		select * from tb_user 
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+	
+	<select id="queryByLoginName" parameterType="java.lang.String" resultMap="userMap">
+		select * from tb_user where login_name = #{loginName}
+	</select>
+	
+	<select id="queryForPage" parameterType="java.util.Map" resultMap="userMap">
+		select * from tb_user 
+		<where>
+			<if test="obj!=null">
+				<if test="obj.loginName!=null and obj.loginName!=''">
+					and login_name like '%${obj.loginName}%' 
+				</if>
+				<if test="obj.userName!=null and obj.userName!=''">
+					and user_name like '%${obj.userName}%' 
+				</if>
+				<if test="obj.passWord!=null and obj.passWord!=''">
+					and password = #{obj.passWord}
+				</if>
+				<if test="obj.saltCode!=null and obj.saltCode!=''">
+					and salt_code = #{obj.saltCode}
+				</if>
+				<if test="obj.sex!=null and obj.sex!=''">
+					and sex = #{obj.sex}
+				</if>
+				<if test="obj.phone!=null and obj.phone!=''">
+					and phone = #{obj.phone}
+				</if>
+				<if test="obj.email!=null and obj.email!=''">
+					and email = #{obj.email}
+				</if>
+				<if test="obj.address!=null and obj.address!=''">
+					and address = #{obj.address}
+				</if>
+				<if test="obj.unit!=null and obj.unit!=''">
+					and unit = #{obj.unit}
+				</if>
+				<if test="obj.timeLimit!=null and obj.timeLimit>0">
+					and time_limit = #{obj.timeLimit}
+				</if>
+				<if test="obj.ip!=null and obj.ip!=''">
+					and ip = #{obj.ip}
+				</if>
+				
+				<if test="obj.userCardId!=null and obj.userCardId!=''">
+					and user_card_id = #{obj.userCardId}
+				</if>
+				<if test="obj.validStatus!=null and obj.validStatus!=''">
+					and valid_status = #{obj.validStatus}
+				</if>
+				<if test="obj.remark!=null and obj.remark!=''">
+					and remark = #{obj.remark}
+				</if>
+			</if>
+		</where>
+		order by id desc limit ${start}, ${limit}
+	</select>
+
+	<delete id="deleteById" parameterType="int">
+		delete from tb_user where id = #{id}
+	</delete>
+	
+	<update id="updateById" parameterType="com.sq.sso.model.User">
+		update tb_user 
+		<set>
+			<if test="userName!=null and userName!=''">
+				user_name = #{userName},
+			</if>
+			<if test="passWord!=null and passWord!=''">
+				password = #{passWord},
+			</if>
+			<if test="saltCode!=null and saltCode!=''">
+				salt_code = #{saltCode},
+			</if>
+			<if test="sex!=null and sex!=''">
+				sex = #{sex},
+			</if>
+			<if test="phone!=null and phone!=''">
+				phone = #{phone},
+			</if>
+			<if test="email!=null and email!=''">
+				email = #{email},
+			</if>
+			<if test="address!=null and address!=''">
+				address = #{address},
+			</if>
+			<if test="unit!=null and unit!=''">
+				unit = #{unit},
+			</if>
+			<if test="timeLimit!=null and timeLimit>0">
+				time_limit = #{timeLimit},
+			</if>
+			<if test="ip!=null and ip!=''">
+				ip = #{ip},
+			</if>
+			<if test="regDate!=null and regDate!=''">
+				reg_date = #{regDate},
+			</if>
+			<if test="expireDate!=null and expireDate!=''">
+				expire_date = #{expireDate},
+			</if>
+			<if test="userCardId!=null and userCardId!=''">
+				user_card_id = #{userCardId},
+			</if>
+			<if test="validStatus!=null and validStatus!=''">
+				valid_status = #{validStatus},
+			</if>
+			<if test="remark!=null and remark!=''">
+				remark = #{remark},
+			</if>
+			
+			org_code = #{orgCode}
+			
+		</set>
+		where id = #{id}
+	</update>
+	
+	<insert id="save" parameterType="com.sq.sso.model.User" useGeneratedKeys="true" keyProperty="id">
+		insert into tb_user(login_name,user_name,level,password,salt_code,sex,phone,email,address,unit,time_limit,ip,reg_date,expire_date,user_card_id,valid_status,remark)
+		values
+		(#{loginName},#{userName},#{level},#{passWord,jdbcType=VARCHAR},#{saltCode,jdbcType=VARCHAR},#{sex,jdbcType=NUMERIC},#{phone,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{unit,jdbcType=VARCHAR},#{timeLimit,jdbcType=NUMERIC}
+		,#{ip,jdbcType=VARCHAR},#{regDate},#{expireDate},#{userCardId,jdbcType=VARCHAR},#{validStatus,jdbcType=NUMERIC},#{remark,jdbcType=VARCHAR})
+	</insert>
+	
+	<update id="destoryUserByUserId" parameterType="com.sq.sso.model.User">
+		update tb_user 
+		<set>
+			<if test="validStatus!=null and validStatus!=''">
+				valid_status = #{validStatus},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<update id="updateErrorNumAndCurrentDate" parameterType="com.sq.sso.model.User">
+	update tb_user 
+		<set>
+			<if test="errorNum!=-1">
+				error_num = #{errorNum},
+			</if>
+			<if test="currentDate!=null and currentDate!=''">
+				CURRENTDATE = #{currentDate}
+		</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+</mapper>

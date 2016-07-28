@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PermissionRoleRelation">
+	<resultMap type="com.sq.sso.model.PermissionRoleRelation" id="permissionRoleRelationMap">
+		<result property="permissionId" column="permission_id" />
+		<result property="roleId" column="role_id" />
+	</resultMap>
+	
+	<sql id="sql_where">
+		<if test="permissionId>-1">
+			and permission_id = #{permissionId}
+		</if>
+		<if test="roleId>-1">
+			and role_id = #{roleId}
+		</if>
+	</sql>
+	
+	<select id="validate" parameterType="int" resultType="_int">
+		select 1 from tb_permission_role_relation 
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+	
+	
+	<select id="queryByPermissionRoleRelation" parameterType="com.sq.sso.model.PermissionRoleRelation" resultType="_int">
+		select permission_id,role_id from tb_permission_role_relation 
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+	
+		<select id="query" parameterType="com.sq.sso.model.PermissionRoleRelation" resultMap="permissionRoleRelationMap">
+		select permission_id,role_id from tb_permission_role_relation 
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+	
+	<delete id="delete" parameterType="com.sq.sso.model.PermissionRoleRelation">
+		delete from tb_permission_role_relation 
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</delete>
+	
+	<insert id="save" parameterType="com.sq.sso.model.PermissionRoleRelation">
+		insert into tb_permission_role_relation(permission_id,role_id)
+		values
+		(#{permissionId},#{roleId})
+	</insert>
+	
+	<delete id="delPRRBypermissionId" parameterType="_int">
+		delete from tb_permission_role_relation prr where prr.permission_id =#{id}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Satisfaction">
+
+	<resultMap type="com.jsscom.ces.model.Satisfaction" id="satisfactionMap">	
+	 <result property="orgName" column="org_name" />
+	 <result property="empName" column="emp_name" />
+	 <result property="sumCount" column="sum_count" />
+	 <result property="agvSatis" column="agv_satis" />
+	 <result property="point1" column="point1" />
+	 <result property="point3" column="point3" />
+	 <result property="point5" column="point5" />
+	 <result property="serviceName" column="service_name" />
+	</resultMap>
+
+	<sql id="sql_where">
+		<if test="startTime!=null and endTime!=null and startTime!='' and endTime!=''">
+			and t.rectime between '${startTime} 00:00:00' and '${endTime} 23:59:59'
+		</if>
+		<if test="orgCode!=null and orgCode!=''">
+			AND t.org_code like '${orgCode}%'
+		</if>
+		<if test="serviceCode!=null and serviceCode!=''">
+			AND t.service_code in (${serviceCode})
+		</if>
+		<if test="empField!=null and empField!=''">
+			AND (t.emp_code like '%${empField}%' or t.emp_name like '%${empField}%')
+		</if>
+	</sql>
+	
+	<select id="countByEmp" parameterType="java.util.Map" resultType="_int">
+		select count(1) from 
+		(select org_name,emp_name,count(req_id) as sum_count,
+			avg(t.evaluate_value/90) as agv_satis,
+			sum(case when t.evaluate_point=1 then 1 else 0 end) as point1,
+			sum(case when t.evaluate_point=3 then 1 else 0 end) as point3,
+			sum(case when t.evaluate_point=5 then 1 else 0 end) as point5
+		from td_evaluate t left join tb_organization org 
+			on t.org_code = org.code
+			<where>
+				<include refid="sql_where" />
+			</where>
+		group by org_name,emp_name) t
+	</select>
+	
+	
+	<select id="queryForPageByEmp" parameterType="java.util.Map" resultMap="satisfactionMap">
+		select org_code, org_name,emp_name,count(req_id) as sum_count,
+			avg(t.evaluate_value/90) as agv_satis,
+			sum(case when t.evaluate_point=1 then 1 else 0 end) as point1,
+			sum(case when t.evaluate_point=3 then 1 else 0 end) as point3,
+			sum(case when t.evaluate_point=5 then 1 else 0 end) as point5
+		from td_evaluate t left join tb_organization org 
+			on t.org_code = org.code
+			<where>
+				<include refid="sql_where" />
+			</where>
+		group by org_name,emp_name
+		order by sum_count desc 
+		limit ${start},${limit}
+	</select>
+	
+	<select id="countByOrg" parameterType="java.util.Map" resultType="_int">
+		select count(1) from 
+		(select org_name,count(req_id) as sum_count,
+			avg(t.evaluate_value/90) as agv_satis,
+			sum(case when t.evaluate_point=1 then 1 else 0 end) as point1,
+			sum(case when t.evaluate_point=3 then 1 else 0 end) as point3,
+			sum(case when t.evaluate_point=5 then 1 else 0 end) as point5
+		from td_evaluate t left join tb_organization org 
+			on t.org_code = org.code
+			<where>
+				<include refid="sql_where" />
+			</where>
+		group by org_name) t
+	</select>
+	
+	<select id="queryForPageByOrg" parameterType="java.util.Map" resultMap="satisfactionMap">
+		select org_name,count(req_id) as sum_count,
+			avg(t.evaluate_value/90) as agv_satis,
+			sum(case when t.evaluate_point=1 then 1 else 0 end) as point1,
+			sum(case when t.evaluate_point=3 then 1 else 0 end) as point3,
+			sum(case when t.evaluate_point=5 then 1 else 0 end) as point5
+		from td_evaluate t left join tb_organization org 
+			on t.org_code = org.code
+			<where>
+				<include refid="sql_where" />
+			</where>
+		group by org_name
+		order by sum_count desc 
+		limit ${start},${limit}
+	</select>
+	
+	
+	<select id="countByBusiness" parameterType="java.util.Map" resultType="_int">
+		select count(1) from 
+		(select service_name,count(req_id) as sum_count,
+			avg(t.evaluate_value/90) as agv_satis,
+			sum(case when t.evaluate_point=1 then 1 else 0 end) as point1,
+			sum(case when t.evaluate_point=3 then 1 else 0 end) as point3,
+			sum(case when t.evaluate_point=5 then 1 else 0 end) as point5
+		from td_evaluate t left join tb_organization org 
+			on t.org_code = org.code
+			<where>
+				<include refid="sql_where" />
+			</where>
+		group by service_code) t
+	</select>
+	
+	<select id="queryForPageByBusiness" parameterType="java.util.Map" resultMap="satisfactionMap">
+		select service_name,count(req_id) as sum_count,
+			avg(t.evaluate_value/90) as agv_satis,
+			sum(case when t.evaluate_point=1 then 1 else 0 end) as point1,
+			sum(case when t.evaluate_point=3 then 1 else 0 end) as point3,
+			sum(case when t.evaluate_point=5 then 1 else 0 end) as point5
+		from td_evaluate t left join tb_organization org 
+			on t.org_code = org.code
+			<where>
+				<include refid="sql_where" />
+			</where>
+		group by service_code
+		order by sum_count desc 
+		limit ${start},${limit}
+	</select>
+	
+	<select id="queryForBusinessByExcel" parameterType="java.util.Map" resultMap="satisfactionMap">
+		select service_name,count(req_id) as sum_count,
+			avg(t.evaluate_value/90) as agv_satis,
+			sum(case when t.evaluate_point=1 then 1 else 0 end) as point1,
+			sum(case when t.evaluate_point=3 then 1 else 0 end) as point3,
+			sum(case when t.evaluate_point=5 then 1 else 0 end) as point5
+		from td_evaluate t left join tb_organization org 
+			on t.org_code = org.code
+			<where>
+				<include refid="sql_where" />
+			</where>
+		group by service_code
+		order by sum_count desc 
+	</select>
+	
+	<select id="queryForOrgByExcel" parameterType="java.util.Map" resultMap="satisfactionMap">
+		select org_name,count(req_id) as sum_count,
+			avg(t.evaluate_value/90) as agv_satis,
+			sum(case when t.evaluate_point=1 then 1 else 0 end) as point1,
+			sum(case when t.evaluate_point=3 then 1 else 0 end) as point3,
+			sum(case when t.evaluate_point=5 then 1 else 0 end) as point5
+		from td_evaluate t left join tb_organization org 
+			on t.org_code = org.code
+			<where>
+				<include refid="sql_where" />
+			</where>
+		group by org_name
+		order by sum_count desc 
+	</select>
+	
+	<select id="queryForEmpByExcel" parameterType="java.util.Map" resultMap="satisfactionMap">
+		select org_code, org_name,emp_name,count(req_id) as sum_count,
+			avg(t.evaluate_value/90) as agv_satis,
+			sum(case when t.evaluate_point=1 then 1 else 0 end) as point1,
+			sum(case when t.evaluate_point=3 then 1 else 0 end) as point3,
+			sum(case when t.evaluate_point=5 then 1 else 0 end) as point5
+		from td_evaluate t left join tb_organization org 
+			on t.org_code = org.code
+			<where>
+				<include refid="sql_where" />
+			</where>
+		group by org_name,emp_name
+		order by sum_count desc
+	</select>
+	
+</mapper>

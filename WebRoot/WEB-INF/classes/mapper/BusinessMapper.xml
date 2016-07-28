@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Business">
+
+	<resultMap type="com.jsscom.ces.model.Business" id="businessMap">
+		<result property="id" column="id" />
+		<result property="code" column="code" />
+		<result property="name" column="name" />
+		<result property="createTime" column="create_time" />
+	</resultMap>
+
+	<sql id="sql_where">
+		<if test="code!=null and code!=''">
+			and code = #{code}		</if>
+		<if test="name!=null and name!=''">
+			and name like '%${name}%'
+		</if>
+	</sql>
+
+	<select id="count" parameterType="com.jsscom.ces.model.Business"
+		resultType="int">
+		select count(1) from td_business
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+	
+	<select id="queryForPage" parameterType="java.util.Map" resultMap="businessMap">
+		select id, 
+			   code, 
+			   name, 
+			   create_time
+		from td_business
+		<where>
+			<if test="obj!=null">
+				<if test="obj.code!=null and obj.code!=''">
+					and code = #{obj.code}
+				</if>
+				<if test="obj.name!=null and obj.name!=''">
+					and name like '%${obj.name}%' 
+				</if>
+			</if>
+		</where>
+		order by id desc limit ${start}, ${limit}
+	</select>
+	
+	<insert id="save" parameterType="com.jsscom.ces.model.Business" >
+		insert into td_business 
+		(
+			name,code,create_time
+		) 
+		values 
+		(
+		    #{name, jdbcType=VARCHAR}, 
+		    #{code, jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<select id="queryById" parameterType="int" resultMap="businessMap" >
+		select id, 
+			   code, 
+			   name, 
+			   create_time
+		from td_business
+		where id=#{id}
+	</select>
+	
+	<update id="updateById" parameterType="com.jsscom.ces.model.Business">
+		update td_business
+		<set>
+			<if test="name!=null and name!=''">
+				name = #{name}, 
+			</if>
+			<if test="code!=null and code!=''">
+				code = #{code},  
+			</if>
+			<if test="createTime!=null and createTime!=''">
+				create_time = #{createTime},  
+			</if>
+		</set>
+		
+		where id=#{id} 
+	</update>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from td_business where id = #{id}
+	</delete>
+	
+	<select id="queryBusiness" resultMap="businessMap">
+		select id, code, name from td_business 
+	</select>
+	
+	<select id="query" resultMap="businessMap" parameterType="java.lang.String" fetchSize="50">
+		select id, code, name from td_business 
+		<where>
+		<if test="_parameter!=null and _parameter!=''">
+	     name like '%${_parameter}%'  or code like '%${_parameter}%'
+		</if>
+		</where>
+	</select>
+	
+	<select id="queryBusinessByCode" parameterType="java.lang.String" resultType="_int">
+		select count(1) from td_business where code = #{code}
+	</select>
+	
+</mapper>

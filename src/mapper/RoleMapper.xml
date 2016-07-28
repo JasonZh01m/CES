@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Role">
+
+	<resultMap type="com.sq.sso.model.Role" id="roleMap">	
+	 <result property="id" column="ID" />
+	 <result property="code" column="CODE" />
+	 <result property="name" column="NAME" />
+	 <result property="remark" column="REMARK" />
+	</resultMap>
+
+	<sql id="sql_where">
+		<if test="id!=null and id>0">
+			and id = #{id}
+		</if>
+		<if test="name!=null and name!=''">
+			and name = #{name}
+		</if>
+		<if test="code!=null and code!=''">
+			and code = #{code}
+		</if>
+	</sql>
+	<select id="queryByRole" parameterType="com.sq.sso.model.Role"
+		resultMap="roleMap">
+		select * from tb_role
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+
+	<select id="count" parameterType="com.sq.sso.model.Role"
+		resultType="_int">
+		select count(1) from tb_role
+		<where>
+				<!-- <if test="id!=null and id>0">
+					and id = #{id}
+				</if> -->
+				<if test="name!=null and name!=''">
+					and name like '%${name}%'
+				</if>
+		</where>
+	</select>
+
+
+	<select id="queryById" parameterType="int" resultMap="roleMap">
+		select *
+		from TB_ROLE where Id=#{id}
+	</select>
+
+	<select id="queryRoleByUser" parameterType="_int" resultMap="roleMap">
+		select r.* from (select * from tb_user_role_relation where user_id=#{id}) ur 
+		left join tb_role r on r.id=ur.role_id
+	</select>
+	
+	
+	<select id="queryAllRole" resultMap="roleMap">
+		select * from tb_role 
+	</select>
+
+	<select id="queryForPage" parameterType="java.util.Map"
+		resultMap="roleMap">
+
+		<!-- select * from TB_ROLE
+		where
+		rowid in
+		(
+		select rid from
+		(
+		select rownum rn,rid from
+		(
+		select rowid rid,id from TB_ROLE
+		<where>
+			<if test="obj!=null">
+				<if test="obj.id!=null and obj.id>0">
+					and id = #{obj.id}
+				</if>
+				<if test="obj.name!=null and obj.name!=''">
+					and name like '%${obj.name}%'
+				</if>
+				
+			</if>
+		</where>
+		order by id desc
+		)
+			<![CDATA[
+		   where rownum<#{end}
+		  )
+		where rn>#{start}
+		) order by id asc
+			]]> -->
+		select * from tb_role
+		<where>
+			<if test="obj!=null">
+				<if test="obj.id!=null and obj.id>0">
+					and id = #{obj.id}
+				</if>
+				<if test="obj.name!=null and obj.name!=''">
+					and name like '%${obj.name}%'
+				</if>
+				
+			</if>
+		</where>
+		order by id desc limit ${start},${limit}
+	</select>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from tb_role where id=#{id}
+	</delete>
+	
+	<update id="updateByRoldId" parameterType="com.sq.sso.model.Role">
+		update tb_role
+		<set>
+				name = #{name,jdbcType=VARCHAR},
+				code = #{code,jdbcType=VARCHAR},
+				remark = #{remark,jdbcType=VARCHAR}
+		</set>
+		where id=#{id}
+	</update>
+	
+	<delete id="deleteRolePermission" parameterType="com.sq.sso.model.Role">
+		delete from tb_permission_role_relation where role_id=#{id}
+	</delete>
+
+
+	<insert id="insertRolePermission" parameterType="HashMap">
+		insert into tb_permission_role_relation(role_id,permission_id) 
+		values( ${roleId},${rightId} )
+	</insert>
+	
+	
+	<insert id="insertRole" parameterType="com.sq.sso.model.Role"  useGeneratedKeys="true" keyProperty="id">
+		insert into tb_role
+		(name,code,remark)
+		values
+		(#{name},#{code},#{remark,jdbcType=VARCHAR})
+	</insert>
+</mapper>

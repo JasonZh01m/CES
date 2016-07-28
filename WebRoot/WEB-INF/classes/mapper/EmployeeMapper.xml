@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Employee">
+
+	<resultMap type="com.jsscom.ces.model.Employee" id="employeeMap">	
+	 <result property="id" column="ID" />
+	 <result property="code" column="code" />
+	 <result property="name" column="name" />
+	 <result property="orgCode" column="org_code" />
+	 <result property="lastTime" column="last_time" />
+	</resultMap>
+
+	<sql id="sql_where">
+		<if test="code!=null and code!=''">
+			and code like '%${code}%' 
+		</if>
+		<if test="name!=null and name!=''">
+			and name like '%${name}%' 
+		</if>
+	</sql>
+
+
+	<select id="count" parameterType="com.jsscom.ces.model.Employee"
+		resultType="int">
+		select count(1) from tb_employee
+		<where>
+			<include refid="sql_where" />
+		</where>
+	</select>
+	
+	<select id="queryForPage" parameterType="java.util.Map" resultMap="employeeMap">
+		select ee.id, 
+			   ee.code, 
+			   ee.name, 
+			   ee.org_code,
+			   org.name orgCodeName,
+			   ee.last_time
+		from tb_employee ee left join tb_organization org 
+			on ee.org_code = org.CODE
+		<where>
+			<if test="obj!=null">
+				<if test="obj.code!=null and obj.code!=''">
+					and ee.code like '%${obj.code}%' 
+				</if>
+				<if test="obj.name!=null and obj.name!=''">
+					and ee.name like '%${obj.name}%' 
+				</if>
+			</if>
+		</where>
+		order by id desc limit ${start}, ${limit}
+	</select>
+	
+	<select id="queryByInfo" parameterType="com.jsscom.ces.model.Employee" resultMap="employeeMap">
+		select id, code, name, org_code, last_time
+		from tb_employee
+		<where>
+			<if test="code!=null and code!=''">
+				and code = #{code}
+			</if>
+			<if test="name!=null and name!=''">
+				and name = #{name}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="queryById" parameterType="int" resultMap="employeeMap" >
+		select id, code, name, org_code, last_time
+		from tb_employee where id=#{id}
+	</select>
+	
+	<insert id="save" parameterType="com.jsscom.ces.model.Employee" >
+		insert into tb_employee (code, name, org_code, last_time) values 
+			(#{code, jdbcType=VARCHAR}, #{name, jdbcType=VARCHAR}, #{orgCode, jdbcType=VARCHAR},
+			 #{lastTime, jdbcType=TIMESTAMP})
+	</insert>
+	
+	<update id="updateById" parameterType="com.jsscom.ces.model.Employee">
+		update tb_employee
+		<set>
+			<if test="code!=null and code!=''">
+				code = #{code}, 
+			</if>
+			<if test="name!=null and name!=''">
+				name = #{name},  
+			</if>
+			<if test="orgCode!=null and orgCode!=''">
+				org_code = #{orgCode}, 
+			</if>
+			<if test="lastTime!=null and lastTime!=''">
+				last_time = #{lastTime}, 
+			</if>
+		</set>
+		where id=#{id} 
+	</update>
+	
+	<select id="chackEmployee" parameterType="com.jsscom.ces.model.Employee" resultMap="employeeMap">
+		select id from tb_employee where code = #{code} and org_code = #{orgCode}
+	</select>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from tb_employee where id = #{id}
+	</delete>
+	
+</mapper>

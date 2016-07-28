@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="  
+    http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+
+   <!-- 配置eh缓存管理器 -->
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation">
+			<value>classpath:config/ehcache.xml</value>
+		</property>
+	</bean>
+	
+	
+	<!-- 配置一个简单的缓存工厂bean对象 -->
+	<bean id="ehUtil" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheManager" ref="cacheManager" />
+		<!-- 使用缓存 关联ehcache.xml中的缓存配置 -->
+		<property name="cacheName" value="LevelOneCache" />
+	</bean>
+    
+
+   <!-- jedis的配置 
+	<bean id="jedisConfig" class="com.gdret.core.cache.JedisConfig">
+		<property name="maxActive" value="50" />
+		<property name="maxIdle" value="5" />
+		<property name="maxWait" value="15000" />
+		<property name="minIdle" value="1" />
+		<property name="timeToLiveSeconds" value="7200" />
+		<property name="testWhileIdle" value="false" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="shards">
+			<list>
+			<bean class="com.gdret.core.cache.JedisNode">
+					<property name="ip" value="192.168.2.131" />
+					<property name="port" value="6379" />
+				</bean> 
+			    <bean class="com.gdret.core.cache.JedisNode">
+					<property name="ip" value="192.168.2.131" />
+					<property name="port" value="6380" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+   -->
+ 
+    <!-- 1级缓存 -->
+    <bean id="L1_Cache" class="com.sq.core.cache.EhcacheUtils">
+	    <property name="cache" ref="ehUtil"/>
+	</bean>
+    
+    <!-- 2级缓存 
+    <bean id="L2_Cache" class="com.gdret.core.cache.JedisUtils">
+	    <constructor-arg ref="jedisConfig" />   
+	    <constructor-arg ref="L1_Cache"/>
+	    <property name="switchFlag" value="off"/>
+	</bean>
+	-->
+	
+	<bean id="generalCacheUtils" class="com.sq.core.cache.GeneralCacheUtils">
+	     <property name="level1Cache" ref="L1_Cache"/>
+	     <!--<property name="level2Cache" ref="L2_Cache"/>-->
+	</bean> 
+
+
+    <bean id="cacheAspect" class="com.sq.core.cache.aop.CacheAspect" >
+      <property name="cacheUtil" ref="generalCacheUtils"/>
+    </bean>
+    
+    <aop:config>
+		<aop:aspect id="aspect" ref="cacheAspect">
+			<aop:pointcut expression="execution(* com.*.*.data.dao.*.queryById(..)) or execution(* com.sq.core.dao.impl.DaoImpl.queryById(..))"
+				id="queryById" />
+			<aop:around method="getModelInCache" pointcut-ref="queryById" />
+			<aop:pointcut expression="execution(* com.*.*.data.dao.*.queryByCode(..)) or execution(* com.sq.core.dao.impl.DaoImpl.queryByCode(..))"
+				id="queryByCode" />
+			<aop:around method="getModelInCacheByCode" pointcut-ref="queryByCode" />
+		    <aop:pointcut expression="execution(* com.*.*.data.dao.*.update(..)) or execution(* com.sq.core.dao.impl.DaoImpl.update(..)) "
+				id="update" />
+			<aop:around method="updateInCache" pointcut-ref="update" />
+			<aop:pointcut expression="execution(* com.*.*.data.dao.*.insert(..)) or execution(* com.sq.core.dao.impl.DaoImpl.insert(..)) "
+				id="insert" />
+			<aop:around method="insertInCache" pointcut-ref="insert" />
+			<aop:pointcut expression="execution(* com.*.*.data.dao.*.deleteById(..)) or execution(* com.sq.core.dao.impl.DaoImpl.deleteById(..)) "
+				id="deleteById" />
+			<aop:around method="deleteInCache" pointcut-ref="deleteById" />
+			<aop:pointcut expression="execution(* com.*.*.data.dao.*.query(..)) or execution(* com.sq.core.dao.impl.DaoImpl.query(..)) "
+				id="query" />
+			<aop:around method="queryInCache" pointcut-ref="query" />
+			<aop:pointcut expression="execution(* com.*.*.data.dao.*.delete(..)) or execution(* com.sq.core.dao.impl.DaoImpl.delete(..)) "
+				id="delete" />
+			<aop:around method="removeCache" pointcut-ref="delete" />
+	   </aop:aspect>
+	</aop:config>
+
+
+</beans>
